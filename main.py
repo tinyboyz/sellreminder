@@ -41,7 +41,6 @@ class PythonService(win32serviceutil.ServiceFramework):
         # 把自己的代码放到这里，就OK
         # 等待服务被停止
         schedule.every().day.at('09:15').do(self.job_everyday_0915)
-        schedule.run_all()
 
         while win32event.WaitForSingleObject(self.hWaitStop, 1000) == win32event.WAIT_TIMEOUT:
             schedule.run_pending()
