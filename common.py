@@ -1,4 +1,5 @@
 import pandas as pd
+import socket
 import json
 import requests
 from datetime import datetime
@@ -87,4 +88,15 @@ def should_sell(stock, buy_date, max_hold_days, hold_days, highest, lowest, lowe
 # 微信通知
 # message:内容
 def notify_wechat(message):
-    requests.get('https://api.day.app/4UPTFKupLPA2FznSbB7M7R/{}'.format(message))
+    proxies = {
+        'http': 'http://localhost:11000',
+        'https': 'http://localhost:11000',
+    }
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    result = sock.connect_ex(('127.0.0.1', 11000))
+    sock.close()
+
+    if result == 0:
+        requests.get('https://api.day.app/4UPTFKupLPA2FznSbB7M7R/{}'.format(message), proxies=proxies)
+    else:
+        requests.get('https://api.day.app/4UPTFKupLPA2FznSbB7M7R/{}'.format(message))
