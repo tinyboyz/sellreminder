@@ -46,6 +46,9 @@ def should_sell(stock, buy_date, max_hold_days, hold_days, highest, lowest, lowe
     high = float(r.text.split(',')[4])
     low = float(r.text.split(',')[5])
 
+    if price == 0 or high == 0 or  low == 0:
+        return '行情初始化', 0
+
     global highest_changed
 
     # 最高最低价变化检测

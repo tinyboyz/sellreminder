@@ -24,12 +24,12 @@ class PythonService(win32serviceutil.ServiceFramework):
         self.buy_price = 44.40
         self.max_hold_days = 9
 
-    def job_everyday_0915(self):
+    def job_everyday_0926(self):
         self.hold_days, self.highest, self.lowest, self.lowest_aft_highest, = get_3_prices(self.stock, self.buy_date)
-        schedule.every(3).seconds.until("15:00").do(self.job_everyday_0915_1500)
+        schedule.every(3).seconds.until("15:00").do(self.job_everyday_0926_1500)
         notify_wechat('{}:{}:持有{}天'.format(self.stock, ' 初始化完成', self.hold_days))
 
-    def job_everyday_0915_1500(self):
+    def job_everyday_0926_1500(self):
         # 判断是否卖出
         op, price = should_sell(self.stock, self.buy_date, self.max_hold_days, self.hold_days, self.highest,
                                 self.lowest, self.lowest_aft_highest,
@@ -40,7 +40,10 @@ class PythonService(win32serviceutil.ServiceFramework):
     def SvcDoRun(self):
         # 把自己的代码放到这里，就OK
         # 等待服务被停止
-        schedule.every().day.at('09:15').do(self.job_everyday_0915)
+        schedule.every().day.at('09:26').do(self.job_everyday_0926)
+        now = datetime.now()
+        if now > now.replace(hour=9, minute=26, second=0, microsecond=0):
+            schedule.run_all()
 
         while win32event.WaitForSingleObject(self.hWaitStop, 1000) == win32event.WAIT_TIMEOUT:
             schedule.run_pending()
