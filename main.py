@@ -19,9 +19,9 @@ class PythonService(win32serviceutil.ServiceFramework):
     def __init__(self, args):
         win32serviceutil.ServiceFramework.__init__(self, args)
         self.hWaitStop = win32event.CreateEvent(None, 0, 0, None)
-        self.stock = '0.002977'
-        self.buy_date = datetime(2022, 7, 8)
-        self.buy_price = 44.40
+        self.stock = '1.603359'
+        self.buy_date = datetime(2022, 7, 12)
+        self.buy_price = 12.05
         self.max_hold_days = 9
 
     def job_everyday_0926(self):
@@ -36,6 +36,7 @@ class PythonService(win32serviceutil.ServiceFramework):
                                 self.buy_price)
         if price != 0:
             notify_wechat('{}:{}:{}'.format(self.stock, op, price))
+            exit(0)
 
     def SvcDoRun(self):
         # 把自己的代码放到这里，就OK
