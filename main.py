@@ -36,7 +36,8 @@ class PythonService(win32serviceutil.ServiceFramework):
                                 self.buy_price)
         if price != 0:
             notify_wechat('{}:{}:{}'.format(self.stock, op, price))
-            exit(0)
+            if op != '更新卖价':
+                exit(0)
 
     def SvcDoRun(self):
         # 把自己的代码放到这里，就OK
