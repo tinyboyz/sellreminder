@@ -44,12 +44,11 @@ class PythonService(win32serviceutil.ServiceFramework):
         # 等待服务被停止
         schedule.every().day.at('09:26').do(self.job_everyday_0926)
         now = datetime.now()
-        if now > now.replace(hour=9, minute=26, second=0, microsecond=0):
+        if now > now.replace(hour=9, minute=26, second=0, microsecond=0) and now < now.replace(hour=15, minute=0, second=0, microsecond=0):
             schedule.run_all()
 
         while win32event.WaitForSingleObject(self.hWaitStop, 1000) == win32event.WAIT_TIMEOUT:
             schedule.run_pending()
-
 
     def SvcStop(self):
         # 先告诉SCM停止这个过程
